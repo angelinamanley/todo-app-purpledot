@@ -21,11 +21,17 @@ function App() {
     );
   };
 
+  const deleteTask = (id) => {
+    API.deleteTask(id).then(() => {
+      setTasks(tasks.filter((task) => id !== task.task_id));
+    });
+  };
+
   return (
     <div className="App">
       <MainHeader />
       <AddTask onAdd={addTask} />
-      <Tasks tasks={tasks}></Tasks>
+      <Tasks onDelete={deleteTask} tasks={tasks}></Tasks>
     </div>
   );
 }

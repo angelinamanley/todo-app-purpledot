@@ -44,7 +44,15 @@ const createTask = async (task) => {
   return data;
 };
 
+const deleteTask = async (id) => {
+    console.log("delete");
+    const data = await fetch(`${TASKS_ENDPOINT}/${id}`, {
+      method: "DELETE",
+    });
+  };
+
 export default {
   getTasks,
-  createTask
+  createTask, 
+  deleteTask
 };
