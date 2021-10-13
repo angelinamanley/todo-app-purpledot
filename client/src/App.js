@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import MainHeader from './components/MainHeader'
 import Tasks from './components/Tasks'
 import AddTask from './components/AddTask'
+import API from './adapters/API'
 
 const sample_tasks = [{ task: "do this", completed: 0, task_id: 1 }, 
 { task: "do that", completed: 1, task_id: 2}, 
@@ -12,9 +13,12 @@ const sample_tasks = [{ task: "do this", completed: 0, task_id: 1 },
 function App() {
   const [tasks, setTasks] = useState([])
 
+ 
   useEffect(() => {
-    setTasks(sample_tasks)
-  }, [])
+    API.getTasks().then(newTasks => {
+      setTasks(newTasks);
+    });
+  }, []);
 
 
   return (
