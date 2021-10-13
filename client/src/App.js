@@ -1,32 +1,31 @@
 import "./App.css";
 import { Button } from "semantic-ui-react";
 import { useEffect, useState } from "react";
-import MainHeader from './components/MainHeader'
-import Tasks from './components/Tasks'
-import AddTask from './components/AddTask'
-import API from './adapters/API'
-
-const sample_tasks = [{ task: "do this", completed: 0, task_id: 1 }, 
-{ task: "do that", completed: 1, task_id: 2}, 
-{ task: "do nothing", completed: 1, task_id: 3 }];
+import MainHeader from "./components/MainHeader";
+import Tasks from "./components/Tasks";
+import AddTask from "./components/AddTask";
+import API from "./adapters/API";
 
 function App() {
-  const [tasks, setTasks] = useState([])
+  const [tasks, setTasks] = useState([]);
 
- 
   useEffect(() => {
-    API.getTasks().then(newTasks => {
+    API.getTasks().then((newTasks) => {
       setTasks(newTasks);
     });
   }, []);
 
+  const addTask = (task) => {
+    API.createTask(task).then((id) =>
+      setTasks([...tasks, { ...task, task_id: id }])
+    );
+  };
 
   return (
     <div className="App">
       <MainHeader />
-      <AddTask />
+      <AddTask onAdd={addTask} />
       <Tasks tasks={tasks}></Tasks>
-      
     </div>
   );
 }

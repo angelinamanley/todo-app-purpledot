@@ -5,7 +5,7 @@ const handleError = (e) => {
   throw e;
 };
 
-//this was borrowed in the interest of time 
+//this was borrowed in the interest of time
 const handleServerResponse = (res) => {
   if (res.ok) {
     return res.text().then((text) => {
@@ -28,6 +28,23 @@ const handleServerResponse = (res) => {
 
 const getTasks = () => fetch(TASKS_ENDPOINT).then(handleServerResponse);
 
+const getTask = (id) =>
+  fetch(`TASKS_ENDPOINT/${id}`).then(handleServerResponse);
+
+const createTask = async (task) => {
+  console.log("<<<", task);
+  const response = await fetch(TASKS_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(task),
+  });
+  const data = await response.json();
+  return data;
+};
+
 export default {
   getTasks,
+  createTask
 };
