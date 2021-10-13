@@ -45,14 +45,28 @@ const createTask = async (task) => {
 };
 
 const deleteTask = async (id) => {
-    console.log("delete");
-    const data = await fetch(`${TASKS_ENDPOINT}/${id}`, {
-      method: "DELETE",
-    });
-  };
+  console.log("delete");
+  const data = await fetch(`${TASKS_ENDPOINT}/${id}`, {
+    method: "DELETE",
+  });
+};
+
+const updateTask = async (task) => {
+    console.log(task)
+  const data = await fetch(`${TASKS_ENDPOINT}/${task.task_id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(task),
+  });
+  const results = await data.json
+  return results
+};
 
 export default {
   getTasks,
-  createTask, 
-  deleteTask
+  createTask,
+  deleteTask,
+  updateTask
 };

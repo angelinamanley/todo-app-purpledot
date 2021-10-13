@@ -5,9 +5,23 @@ import MainHeader from "./components/MainHeader";
 import Tasks from "./components/Tasks";
 import AddTask from "./components/AddTask";
 import API from "./adapters/API";
+import FilterBar from "./components/FilterBar";
 
 function App() {
   const [tasks, setTasks] = useState([]);
+  const [filterParam, setFilterParam] = useState("all");
+
+  const selectedTasks = () => {
+    let filteredTasks;
+    if (filterParam === "completed") {
+      filteredTasks = tasks.filter((task) => task.completed === 1);
+    } else if (filterParam === "incomplete") {
+      filteredTasks = tasks.filter((task) => task.completed === 0);
+    } else {
+      filteredTasks = tasks;
+    }
+    return filteredTasks;
+  };
 
   useEffect(() => {
     API.getTasks().then((newTasks) => {
@@ -27,11 +41,23 @@ function App() {
     });
   };
 
+  const updateTask = (task) => {
+    const newStatus = task.completed === 0 ? 1 : 0;
+    const newTask = { ...task, completed: newStatus };
+    API.updateTask(newTask).then(() => {
+      const newTasks = tasks.map((oldTask) =>
+        oldTask.task_id === task.task_id ? newTask : oldTask
+      );
+      setTasks(newTasks);
+    });
+  };
+
   return (
     <div className="App">
       <MainHeader />
       <AddTask onAdd={addTask} />
-      <Tasks onDelete={deleteTask} tasks={tasks}></Tasks>
+      <FilterBar onSelect={setFilterParam} />
+      <Tasks onUpdate={updateTask} onDelete={deleteTask} tasks={selectedTasks()}></Tasks>
     </div>
   );
 }
