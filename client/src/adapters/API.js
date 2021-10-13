@@ -52,7 +52,7 @@ const deleteTask = async (id) => {
 };
 
 const updateTask = async (task) => {
-    console.log(task)
+  console.log(task);
   const data = await fetch(`${TASKS_ENDPOINT}/${task.task_id}`, {
     method: "PATCH",
     headers: {
@@ -60,13 +60,19 @@ const updateTask = async (task) => {
     },
     body: JSON.stringify(task),
   });
-  const results = await data.json
-  return results
+  const results = await data.json;
+  return results;
 };
+
+const deleteTasks = () =>
+  fetch(TASKS_ENDPOINT, {
+    method: "DELETE",
+  }).then(handleServerResponse);
 
 export default {
   getTasks,
   createTask,
   deleteTask,
-  updateTask
+  updateTask,
+  deleteTasks,
 };

@@ -6,6 +6,7 @@ import Tasks from "./components/Tasks";
 import AddTask from "./components/AddTask";
 import API from "./adapters/API";
 import FilterBar from "./components/FilterBar";
+import DeleteAll from "./components/DeleteAll";
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -52,12 +53,24 @@ function App() {
     });
   };
 
+  const deleteAllTasks = () => {
+    API.deleteTasks().then(() => {
+      const newTasks = tasks.filter(task => task.completed !== 1)
+      setTasks(newTasks);
+    });
+  };
+
   return (
     <div className="App">
       <MainHeader />
       <AddTask onAdd={addTask} />
       <FilterBar onSelect={setFilterParam} />
-      <Tasks onUpdate={updateTask} onDelete={deleteTask} tasks={selectedTasks()}></Tasks>
+      <Tasks
+        onUpdate={updateTask}
+        onDelete={deleteTask}
+        tasks={selectedTasks()}
+      ></Tasks>
+      <DeleteAll onDelete={deleteAllTasks} />
     </div>
   );
 }
