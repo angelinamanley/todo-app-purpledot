@@ -45,21 +45,32 @@ router.delete("/tasks/:id", (req, res) => {
 
 router.patch("/tasks/:id", (req, res) => {
   const id = req.params.id;
-  console.log('<<<BODY', req.body)
+  console.log("<<<BODY", req.body);
   const queryColumns = Object.keys(req.body)
     .map((key) => `${key} = ?`)
     .join(", ");
   const updateValues = [...Object.values(req.body), parseInt(id)];
   const query = "UPDATE Task SET " + queryColumns + " WHERE task_id = ?";
   console.log(query);
-  console.log(updateValues)
-  connection.query(query, updateValues, function( err, result ) {
-      if (err) {
-          console.log(err)
-         return  res.status(500).send()
-      }
-      res.send(result)
-    })
+  console.log(updateValues);
+  connection.query(query, updateValues, function (err, result) {
+    if (err) {
+      console.log(err);
+      return res.status(500).send();
+    }
+    res.send(result);
+  });
+});
+
+router.delete("/tasks", (req, res) => {
+  const query = "DELETE from Task where completed = 1";
+  connection.query(query, req.body, function (err, result) {
+    if (err) {
+      console.log(err);
+      return res.status(400).send("Unable to delete tasls!");
+    }
+    res.send(result);
+  });
 });
 
 module.exports = router;
